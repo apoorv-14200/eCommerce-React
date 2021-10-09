@@ -1,33 +1,56 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { addItem, subItem, getProducts } from '../action';
-
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { addTocart, fetchcart } from "../action/cart";
 const AddSubItem = (props) => {
-    const addOnClick = (id) => {
-        props.addItem(id);
-    }
+  const [count, changeCount] = useState(0);
+  const addOnClick = () => {
+    changeCount(count + 1);
+  };
 
-    const subOnClick = (id) => {
-        props.subItem(id);
+  const subOnClick = (id) => {
+    let p = count - 1;
+    if (p < 0) {
+      p = 0;
     }
+    changeCount(p);
+  };
+  const handleClick = async (id, count) => {
+    console.log("add to cart dispatched");
+    props.dispatch(addTocart(id, count));
+  };
 
-    return (
-        <div className="AddSubButton">
-            <button className="ui small primary button" onClick={() => subOnClick(props.id)}>
-                -
-            </button>
-            <div className="countItem" >
-                {props.items[props.id]}
-            </div>
-            <button className="ui small button" onClick={() => addOnClick(props.id)}>
-                +
-            </button>
+  return (
+    <div>
+      <div className="AddSubButton">
+        <button
+          className="ui small primary button"
+          onClick={() => subOnClick()}
+        >
+          -
+        </button>
+        <div className="countItem">{count}</div>
+        <button className="ui small button" onClick={() => addOnClick()}>
+          +
+        </button>
+      </div>
+      <div className="CartAndBuy">
+        <div className="ui buttons">
+          <button
+            className="ui button"
+            onClick={() => handleClick(props.id, count)}
+          >
+            Add to Cart
+          </button>
+          <div className="or"></div>
+          <button className="ui positive button">Buy Now</button>
         </div>
-    );
+      </div>
+    </div>
+  );
+};
+
+function mapStateToProps(state) {
+  return {};
 }
 
-const mapStateToProps = state => {
-    return { items: state.items };
-}
-
-export default connect(mapStateToProps, { addItem, subItem })(AddSubItem);
+export default connect(mapStateToProps)(AddSubItem);

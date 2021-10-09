@@ -1,32 +1,31 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 
-import '../css/Cart.css';
-import { getCartItems } from '../action';
-import CartItem from '../Components/CartItem';
-
+import "../css/Cart.css";
+import CartItem from "../Components/CartItem";
+import { fetchcart } from "../action/cart";
+import { setTab } from "../action/curtab";
 
 const Cart = (props) => {
+  useEffect(() => {
+    props.dispatch(fetchcart());
+    props.dispatch(setTab("Cart"));
+  }, []);
+  const cart = props.cart;
+  return (
+    <div className="CartItems">
+      {cart.map((item) => {
+        return <CartItem item={item} />;
+      })}
+    </div>
+  );
+};
 
-    useEffect(() => {
-        props.getCartItems();
-    }, []);
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+    cart: state.cart,
+  };
+};
 
-    const renderList = props.cartItems.map(obj => {
-        return <CartItem obj={obj} />
-    })
-    return (
-        <div className="CartItems">
-            {renderList}
-        </div>
-    );
-}
-
-const mapStateToProps = state => {
-    return {
-        cartItems: state.cartItems,
-        itemById: state.itemById
-    };
-}
-
-export default connect(mapStateToProps, { getCartItems })(Cart);
+export default connect(mapStateToProps)(Cart);

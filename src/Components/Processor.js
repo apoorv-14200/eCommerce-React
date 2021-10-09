@@ -1,36 +1,32 @@
-import React, { useEffect } from 'react';
-import Item from './Item';
-import '../css/Motherboard.css';
-import { getProducts } from '../action';
-import { connect } from 'react-redux';
+import React, { useEffect } from "react";
+import Item from "./Item";
+import "../css/Motherboard.css";
+import { connect } from "react-redux";
+import { fetchproducts } from "../action/products";
+import { setTab } from "../action/curtab";
+const Microprocessor = (props) => {
+  useEffect(() => {
+    props.dispatch(fetchproducts("Microprocessor"));
+    props.dispatch(setTab("Processor"));
+  }, []);
+  const renderList = props.products.map((product) => {
+    return <Item product={product} />;
+  });
 
-const Motherboard = (props) => {
+  return (
+    <div className="ItemContainer">
+      <div className="ItemGrid">
+        {renderList}
+        {/* {console.dir(renderList)} */}
+      </div>
+    </div>
+  );
+};
 
-    useEffect(() => {
-        props.getProducts('Processor');
-    }, []);
+const mapStateToProps = (state) => {
+  return {
+    products: state.products,
+  };
+};
 
-    const renderList = props.prodList.map(({ id, img, price, title }) => {
-        return <Item id={id} title={title} src={img} price={price} />;
-    })
-
-
-    return (
-        <div className="ItemContainer">
-            <div className="ItemGrid">
-                {renderList}
-                {/* {console.dir(renderList)} */}
-
-            </div>
-        </div>
-    );
-}
-
-const mapStateToProps = state => {
-    return ({
-        prodList: state.prodList,
-    })
-}
-
-
-export default connect(mapStateToProps, { getProducts })(Motherboard);
+export default connect(mapStateToProps)(Microprocessor);

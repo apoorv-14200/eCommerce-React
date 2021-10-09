@@ -1,12 +1,20 @@
-import React from 'react';
-import MyCarousel from './Carousel.js';
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { setTab } from "../action/curtab.js";
+import MyCarousel from "./Carousel.js";
 
-const Home = () => {
-    return (
-        <div>
-            <MyCarousel />
-        </div>
-    );
+const Home = (props) => {
+  useEffect(() => {
+    props.dispatch(setTab("Home"));
+  }, []);
+  return (
+    <div>
+      <MyCarousel />
+    </div>
+  );
+};
+
+function mapStateToProps(state) {
+  return {};
 }
-
-export default Home;
+export default connect(mapStateToProps)(Home);
